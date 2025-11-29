@@ -2,7 +2,7 @@
 _create-pr-from-file file:
     #!/usr/bin/env bash
     tmpfile="{{ file }}"
-    bodyfile=$(mktemp --suffix=.md)
+    bodyfile=$(mktemp)
     ${EDITOR:-vim} "$tmpfile"
     if [ -s "$tmpfile" ]; then
         title=$(head -n 1 "$tmpfile")
@@ -32,7 +32,7 @@ pr *args:
 [positional-arguments]
 full-pr *args:
     #!/usr/bin/env bash
-    tmpfile=$(mktemp --suffix=.md)
+    tmpfile=$(mktemp)
     gum spin --spinner dot --title "Generating PR description..." -- claude -p "/pr $@" > "$tmpfile"
     just _create-pr-from-file "$tmpfile"
     rm "$tmpfile"
@@ -41,7 +41,7 @@ full-pr *args:
 [positional-arguments]
 simple-pr *args:
     #!/usr/bin/env bash
-    tmpfile=$(mktemp --suffix=.md)
+    tmpfile=$(mktemp)
     gum spin --spinner dot --title "Generating Simple PR description..." -- claude -p "/simple-pr $@" > "$tmpfile"
     just _create-pr-from-file "$tmpfile"
     rm "$tmpfile"
